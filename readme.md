@@ -5,7 +5,7 @@ Query Database using natural language
 ## Tech Stack
 
 - Python
-- Django
+- FastAPI
 - Langchain
 - LLM Models
 - React
