@@ -1,9 +1,10 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from model import QueryRequest
+from model import QueryRequest, DbRequest
 from langchain_utils import handle_langchain_request
 from speech_to_text import transcribe_audio
+from database_manager import execute
 
 app = FastAPI()
 
@@ -22,6 +23,12 @@ async def generate(request: QueryRequest):
 @app.post("/transcribe/")
 async def transcribe(file: UploadFile = File(...)):
     return await transcribe_audio(file)
+
+@app.post("/executeQuery/")
+async def execute_query(request: DbRequest):
+    result = await execute(request.db_url, request.query)
+    return {"result": result}
+    
 
 if __name__ == "__main__":
     import uvicorn

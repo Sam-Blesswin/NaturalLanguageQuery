@@ -12,3 +12,7 @@ class TableModel(BaseModel):
 class QueryRequest(BaseModel):
     schema: List[TableModel]
     prompt: str
+
+class DbRequest(BaseModel):
+    db_url: str
+    query: str
