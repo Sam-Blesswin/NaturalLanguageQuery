@@ -31,23 +31,16 @@ async def transcribe_audio(file: UploadFile = File(...)):
     # config = speech.RecognitionConfig(language_code="en")
     # audio = speech.RecognitionAudio(uri="gs://cloud-samples-data/speech/brooklyn_bridge.flac")
 
-    if not file.filename.endswith(('.wav', '.mp3', '.flac')):
+    if not file.filename.endswith(('.mp3')):
         raise HTTPException(status_code=400, detail="Unsupported file format")
 
     # Read file content
     file_content = await file.read()
 
-    if file.filename.endswith('.mp3'):
-        encoding = speech.RecognitionConfig.AudioEncoding.MP3
-    elif file.filename.endswith('.wav'):
-        encoding = speech.RecognitionConfig.AudioEncoding.LINEAR16
-    elif file.filename.endswith('.flac'):
-        encoding = speech.RecognitionConfig.AudioEncoding.FLAC
-
     # Prepare the audio data for the Google API
     audio = speech.RecognitionAudio(content=file_content)
     config = speech.RecognitionConfig(
-        encoding=encoding,
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
         sample_rate_hertz=16000,
         language_code="en-US"
     )
