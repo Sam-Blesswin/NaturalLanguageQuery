@@ -18,6 +18,7 @@ var/
 wheels/
 pip-wheel-metadata/
 MANIFEST
+dependencies/
 
 # Virtual environment
 venv/
