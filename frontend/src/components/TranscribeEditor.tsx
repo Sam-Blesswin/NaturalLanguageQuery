@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 
@@ -14,8 +14,6 @@ const TranscribeEditor = ({
   onQueryGenerated,
 }: TranscribeEditorProps) => {
   const [responseData, setResponseData] = useState<string>(transcription);
-  const [timer, setTimer] = useState<number>(5);
-  const [timerActive, setTimerActive] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const sendData = async () => {
@@ -36,31 +34,11 @@ const TranscribeEditor = ({
   };
 
   useEffect(() => {
-    if (transcription == "") return;
-
     setResponseData(transcription);
-    setTimer(5);
-    setTimerActive(true);
-
-    const intervalId = setInterval(() => {
-      setTimer((prevTime) => {
-        if (prevTime == 1) {
-          clearInterval(intervalId);
-          sendData();
-          setTimerActive(false);
-          return 0;
-        }
-
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(intervalId);
   }, [transcription]);
 
   const changeTranscription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setResponseData(e.target.value);
-    setTimerActive(false);
     console.log("modified");
   };
 
@@ -78,17 +56,9 @@ const TranscribeEditor = ({
         placeholder="Query the database with natural language"
       />
       <div className="flex items-center space-x-4">
-        {timerActive && (
-          <span className="text-gray-600 font-medium">
-            Auto send in {timer} {timer === 1 ? "second" : "seconds"}
-          </span>
-        )}
         <button
-          className={`bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out ${
-            timerActive ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out "
           onClick={sendData}
-          disabled={timerActive}
         >
           Get SQL Query
         </button>
