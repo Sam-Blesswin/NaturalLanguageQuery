@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Loading from "./Loading";
 
 interface QueryDisplayProp {
   query: string;
@@ -8,8 +9,10 @@ interface QueryDisplayProp {
 const QueryDisplay = ({ query }: QueryDisplayProp) => {
   const [dbUrl, setDbUrl] = useState<string>(""); // State to hold the database URL
   const [response, setResponse] = useState<string>(""); // State to hold the server response
+  const [loading, setLoading] = useState<boolean>(false);
 
   const executeQuery = async () => {
+    setLoading(true);
     try {
       const result = await axios.post("http://localhost:8000/executeQuery/", {
         db_url: dbUrl,
@@ -18,11 +21,14 @@ const QueryDisplay = ({ query }: QueryDisplayProp) => {
       setResponse(`Success: ${JSON.stringify(result.data)}`);
     } catch (error: any) {
       setResponse(`Error: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="rounded-lg shadow-lg p-4 bg-white">
+      {loading ? <Loading /> : ""}
       <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
         Generated Query:
       </h2>
@@ -44,10 +50,13 @@ const QueryDisplay = ({ query }: QueryDisplayProp) => {
       >
         Execute Query
       </button>
-      {response == "" ? (
-        ""
-      ) : (
-        <div className="bg-gray-100 p-3 rounded-lg mb-4">{response}</div>
+      {response && (
+        <div
+          className="bg-gray-100 p-3 rounded-lg overflow-auto"
+          style={{ maxHeight: "200px" }}
+        >
+          {response}
+        </div>
       )}
     </div>
   );

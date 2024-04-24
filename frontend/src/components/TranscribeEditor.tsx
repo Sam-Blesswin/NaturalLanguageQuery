@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Loading from "./Loading";
 
 interface TranscribeEditorProps {
   transcription: string;
@@ -15,9 +16,11 @@ const TranscribeEditor = ({
   const [responseData, setResponseData] = useState<string>(transcription);
   const [timer, setTimer] = useState<number>(5);
   const [timerActive, setTimerActive] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const sendData = async () => {
     try {
+      setLoading(true);
       const result = await axios.post("http://localhost:8000/generate", {
         schema: JSON.parse(schema),
         prompt: responseData,
@@ -27,6 +30,8 @@ const TranscribeEditor = ({
       onQueryGenerated(result.data["response"]["text"]);
     } catch (error) {
       console.error("Failed to send data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +66,7 @@ const TranscribeEditor = ({
 
   return (
     <div className="rounded-lg shadow-lg p-4 bg-white">
+      {loading ? <Loading /> : ""}
       <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
         Transcribe Editor
       </h2>

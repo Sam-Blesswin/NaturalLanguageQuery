@@ -1,5 +1,7 @@
 import { useReactMediaRecorder } from "react-media-recorder";
+import Loading from "./Loading";
 import axios from "axios";
+import { useState } from "react";
 
 interface AudioRecorderProps {
   onTranscriptionComplete: (transcription: string) => void;
@@ -8,8 +10,10 @@ interface AudioRecorderProps {
 const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) => {
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ audio: true });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const sendAudioToServer = async () => {
+    setLoading(true);
     if (mediaBlobUrl) {
       const response = await fetch(mediaBlobUrl);
       const blob = await response.blob();
@@ -31,12 +35,15 @@ const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) => {
         console.log(result.data);
       } catch (error) {
         console.error("Error uploading the file: ", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
     <div className="rounded-lg shadow-lg p-4 bg-white">
+      {loading ? <Loading /> : ""}
       <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
         Audio Recorder
       </h2>
