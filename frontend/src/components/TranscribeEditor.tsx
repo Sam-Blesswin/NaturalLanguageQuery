@@ -53,25 +53,36 @@ const TranscribeEditor = ({
     return () => clearInterval(intervalId);
   }, [transcription]);
 
-  const ChangeTranscription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const changeTranscription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setResponseData(e.target.value);
     setTimerActive(false);
+    console.log("modified");
   };
 
   return (
-    <div>
+    <div className="rounded-lg shadow-lg p-4 bg-white">
+      <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
+        Transcribe Editor
+      </h2>
       <textarea
+        className="w-full p-3 text-sm text-gray-700 border rounded-lg focus:ring-blue-500 focus:border-blue-500 block transition duration-300 ease-in-out mb-4 "
         value={responseData}
-        onChange={ChangeTranscription}
+        onChange={changeTranscription}
         rows={4}
-        cols={50}
-        placeholder="Query the database with natural lanaguage"
+        placeholder="Query the database with natural language"
       />
-      <div>
-        {timerActive && <span>auto send in {timer}</span>}
+      <div className="flex items-center space-x-4">
+        {timerActive && (
+          <span className="text-gray-600 font-medium">
+            Auto send in {timer} {timer === 1 ? "second" : "seconds"}
+          </span>
+        )}
         <button
-          className="bg-green-700 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+          className={`bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out ${
+            timerActive ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={sendData}
+          disabled={timerActive}
         >
           Get SQL Query
         </button>

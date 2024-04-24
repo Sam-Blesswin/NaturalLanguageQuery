@@ -36,28 +36,43 @@ const AudioRecorder = ({ onTranscriptionComplete }: AudioRecorderProps) => {
   };
 
   return (
-    <div>
-      <p>Status: {status}</p>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={startRecording}
-      >
-        Start Recording
-      </button>
-      <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-        onClick={stopRecording}
-      >
-        Stop Recording
-      </button>
-      <button
-        className="bg-green-700 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
-        onClick={sendAudioToServer}
-        disabled={!mediaBlobUrl}
-      >
-        Upload
-      </button>
-      {mediaBlobUrl && <audio src={mediaBlobUrl} controls className="mt-2" />}
+    <div className="rounded-lg shadow-lg p-4 bg-white">
+      <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
+        Audio Recorder
+      </h2>
+      <div className="mb-4">
+        <p className="text-sm font-semibold text-gray-600">
+          Status: <span className="text-blue-600">{status}</span>
+        </p>
+      </div>
+      <div className="flex justify-center gap-4 mb-4">
+        <button
+          className="inline-flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition duration-300 ease-in-out"
+          onClick={startRecording}
+        >
+          Start Recording
+        </button>
+        <button
+          className="inline-flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded transition duration-300 ease-in-out"
+          onClick={stopRecording}
+        >
+          Stop Recording
+        </button>
+        <button
+          className={`inline-flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition duration-300 ease-in-out ${
+            mediaBlobUrl ? "" : "opacity-50 cursor-not-allowed"
+          }`}
+          onClick={sendAudioToServer}
+          disabled={!mediaBlobUrl}
+        >
+          Upload
+        </button>
+      </div>
+      {mediaBlobUrl && (
+        <div className="flex justify-center">
+          <audio src={mediaBlobUrl} controls className="rounded" />
+        </div>
+      )}
     </div>
   );
 };

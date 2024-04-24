@@ -22,20 +22,33 @@ const QueryDisplay = ({ query }: QueryDisplayProp) => {
   };
 
   return (
-    <div>
-      <div>Generated Query:</div>
-      <div>{query}</div>
+    <div className="rounded-lg shadow-lg p-4 bg-white">
+      <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
+        Generated Query:
+      </h2>
+      {query == "" ? (
+        ""
+      ) : (
+        <div className="bg-gray-100 p-3 rounded-lg mb-4">{query}</div>
+      )}
       <input
         type="text"
         value={dbUrl}
         onChange={(e) => setDbUrl(e.target.value)}
         placeholder="Paste the database URL here"
-        style={{ margin: "10px 0", width: "100%" }}
+        className="w-full p-3 text-sm text-gray-700 border rounded-lg focus:ring-blue-500 focus:border-blue-500 block transition duration-300 ease-in-out mb-4"
       />
-      <button onClick={executeQuery} style={{ marginBottom: "10px" }}>
+      <button
+        onClick={executeQuery}
+        className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out mb-4"
+      >
         Execute Query
       </button>
-      <div>{response}</div>
+      {response == "" ? (
+        ""
+      ) : (
+        <div className="bg-gray-100 p-3 rounded-lg mb-4">{response}</div>
+      )}
     </div>
   );
 };
