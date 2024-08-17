@@ -5,7 +5,7 @@ from model import QueryRequest, DbRequest
 from langchain_utils import handle_langchain_request
 from speech_to_text import transcribe_audio
 from database_manager import execute
-
+#vijay is here
 app = FastAPI()
 
 app.add_middleware(
